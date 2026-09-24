@@ -1,0 +1,4291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Spreadsheet Systems — Demo</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+:root {
+
+    --bg: #080b10;
+    --surface: #10151d;
+    --surface-2: #171e28;
+    --surface-3: #1d2632;
+
+    --text: #f4f7fa;
+    --muted: #94a0ae;
+
+    --green: #65e6a3;
+    --green-dark: #183d2c;
+
+    --blue: #6da8ff;
+    --blue-dark: #162d4d;
+
+    --yellow: #ffd166;
+    --yellow-dark: #47391b;
+
+    --red: #ff7777;
+    --red-dark: #461e22;
+
+    --border: rgba(255,255,255,0.09);
+
+    --radius: 18px;
+
+    --shadow:
+        0 25px 80px rgba(0,0,0,0.35);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(109,168,255,0.12),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 90% 0%,
+            rgba(101,230,163,0.10),
+            transparent 30%
+        ),
+
+        var(--bg);
+
+    line-height: 1.55;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+
+/* =========================================================
+   NAV
+========================================================= */
+
+nav {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    background:
+        rgba(8,11,16,0.80);
+
+    backdrop-filter: blur(18px);
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.nav-inner {
+
+    width:
+        min(1200px, calc(100% - 40px));
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.logo {
+
+    font-size: 1.1rem;
+
+    font-weight: 900;
+
+    letter-spacing: -0.04em;
+}
+
+.logo span {
+    color: var(--green);
+}
+
+.nav-links {
+
+    display: flex;
+
+    gap: 25px;
+}
+
+.nav-links a {
+
+    color: var(--muted);
+
+    font-size: 0.9rem;
+}
+
+.nav-links a:hover {
+    color: var(--text);
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.container {
+
+    width:
+        min(1200px, calc(100% - 40px));
+
+    margin: auto;
+}
+
+section {
+    padding: 90px 0;
+}
+
+.eyebrow {
+
+    display: inline-flex;
+
+    padding: 7px 12px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(101,230,163,0.08);
+
+    border:
+        1px solid rgba(101,230,163,0.2);
+
+    color: var(--green);
+
+    font-size: 0.72rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+}
+
+h1 {
+
+    font-size:
+        clamp(3rem, 7vw, 6rem);
+
+    line-height: 0.95;
+
+    letter-spacing: -0.065em;
+
+    margin: 20px 0;
+}
+
+h2 {
+
+    font-size:
+        clamp(2.1rem, 5vw, 4rem);
+
+    line-height: 1;
+
+    letter-spacing: -0.055em;
+
+    margin: 15px 0;
+}
+
+p {
+    color: var(--muted);
+}
+
+.section-header {
+
+    max-width: 720px;
+
+    margin-bottom: 40px;
+}
+
+.gradient {
+
+    background:
+        linear-gradient(
+            90deg,
+            white,
+            #a3ccff,
+            var(--green)
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.buttons {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 28px;
+}
+
+.button {
+
+    border: 0;
+
+    padding: 13px 18px;
+
+    border-radius: 12px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        transform .2s,
+        opacity .2s;
+}
+
+.button:hover {
+
+    transform:
+        translateY(-2px);
+}
+
+.button-primary {
+
+    background: var(--green);
+
+    color: #06110b;
+}
+
+.button-secondary {
+
+    background: var(--surface);
+
+    color: var(--text);
+
+    border:
+        1px solid var(--border);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    min-height: 650px;
+
+    display: grid;
+
+    align-items: center;
+}
+
+.hero-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 70px;
+
+    align-items: center;
+}
+
+.hero-copy {
+
+    max-width: 680px;
+}
+
+.hero-copy p {
+
+    font-size: 1.1rem;
+
+    max-width: 650px;
+}
+
+
+/* =========================================================
+   MINI DASHBOARD
+========================================================= */
+
+.preview {
+
+    background: var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow);
+}
+
+.preview-top {
+
+    padding: 14px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.dot {
+
+    display: inline-block;
+
+    width: 9px;
+
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: #657080;
+
+    margin-right: 5px;
+}
+
+.preview-content {
+    padding: 22px;
+}
+
+.mini-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 10px;
+}
+
+.mini-card {
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    background: var(--surface-2);
+
+    border:
+        1px solid var(--border);
+}
+
+.mini-card small {
+
+    color: var(--muted);
+}
+
+.mini-card strong {
+
+    display: block;
+
+    font-size: 1.4rem;
+
+    margin-top: 5px;
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.panel {
+
+    background: var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    overflow: hidden;
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,0.15);
+}
+
+.panel-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 18px 20px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+.badge {
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 0.68rem;
+
+    font-weight: 800;
+}
+
+.badge-green {
+
+    color: var(--green);
+
+    background:
+        rgba(101,230,163,0.10);
+}
+
+.badge-red {
+
+    color: var(--red);
+
+    background:
+        rgba(255,119,119,0.10);
+}
+
+.badge-blue {
+
+    color: var(--blue);
+
+    background:
+        rgba(109,168,255,0.10);
+}
+
+
+/* =========================================================
+   BEFORE / AFTER
+========================================================= */
+
+.comparison {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 0.82rem;
+}
+
+th,
+td {
+
+    padding: 12px 14px;
+
+    text-align: left;
+
+    border-bottom:
+        1px solid var(--border);
+
+    white-space: nowrap;
+}
+
+th {
+
+    color: var(--muted);
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   COLOUR CODED AFTER TABLE
+========================================================= */
+
+.after-table th {
+
+    background:
+        #17212d;
+
+    color: #b9c7d6;
+}
+
+.after-table td {
+
+    background:
+        rgba(101,230,163,0.025);
+}
+
+/* Automated fields */
+
+.auto-field {
+
+    background:
+        rgba(101,230,163,0.08) !important;
+
+    color:
+        var(--green);
+
+    font-weight: 700;
+}
+
+/* ID */
+
+.id-field {
+
+    background:
+        rgba(109,168,255,0.09) !important;
+
+    color:
+        var(--blue);
+
+    font-weight: 800;
+}
+
+/* Needs attention */
+
+.warning-field {
+
+    background:
+        rgba(255,209,102,0.08) !important;
+
+    color:
+        var(--yellow);
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.kpi-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+.kpi {
+
+    padding: 22px;
+
+    background: var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 16px;
+}
+
+.kpi-label {
+
+    color: var(--muted);
+
+    font-size: 0.8rem;
+}
+
+.kpi-value {
+
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 2rem;
+
+    font-weight: 900;
+
+    letter-spacing: -0.05em;
+}
+
+.dashboard-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1.25fr .75fr;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+.dashboard-card {
+
+    background: var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    padding: 22px;
+}
+
+
+/* =========================================================
+   CHART
+========================================================= */
+
+.chart {
+
+    height: 230px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 10px;
+
+    padding-top: 20px;
+}
+
+.bar-wrap {
+
+    flex: 1;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 7px;
+}
+
+.bar {
+
+    width: 100%;
+
+    max-width: 50px;
+
+    min-height: 5px;
+
+    border-radius:
+        7px 7px 3px 3px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--green),
+            #348e61
+        );
+
+    transition:
+        height .6s ease;
+}
+
+.bar-label {
+
+    color: var(--muted);
+
+    font-size: 0.7rem;
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.controls {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 220px;
+}
+
+input,
+select,
+textarea {
+
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border-radius: 10px;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--surface-2);
+
+    color:
+        var(--text);
+
+    outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+
+    border-color:
+        var(--blue);
+}
+
+
+/* =========================================================
+   INVOICE BUILDER
+========================================================= */
+
+.invoice-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        310px 1fr;
+
+    gap: 20px;
+
+    align-items: start;
+}
+
+
+/* LEFT CONTROL PANEL */
+
+.invoice-controls {
+
+    position: sticky;
+
+    top: 90px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    padding: 20px;
+}
+
+.control-group {
+
+    margin-bottom: 20px;
+}
+
+.control-group label {
+
+    display: block;
+
+    color:
+        var(--muted);
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+.control-description {
+
+    margin-top: 7px;
+
+    color:
+        var(--muted);
+
+    font-size: 0.75rem;
+}
+
+
+/* INVOICE PAPER */
+
+.invoice-paper {
+
+    background:
+        #ffffff;
+
+    color:
+        #18202a;
+
+    border-radius:
+        8px;
+
+    padding:
+        45px;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,0.35);
+
+    min-height:
+        900px;
+}
+
+.invoice-paper p {
+
+    color:
+        #5d6875;
+}
+
+
+/* INVOICE HEADER */
+
+.invoice-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 40px;
+
+    margin-bottom: 45px;
+}
+
+.business-name {
+
+    font-size: 1.8rem;
+
+    font-weight: 900;
+
+    color: #111820;
+}
+
+.business-details {
+
+    color: #65707c;
+
+    font-size: 0.85rem;
+
+    line-height: 1.7;
+}
+
+.invoice-title {
+
+    text-align: right;
+}
+
+.invoice-title h2 {
+
+    color: #101820;
+
+    margin: 0;
+
+    font-size: 2.2rem;
+
+    letter-spacing: -0.05em;
+}
+
+.invoice-title p {
+
+    margin: 5px 0;
+
+    font-size: 0.82rem;
+}
+
+
+/* INVOICE META */
+
+.invoice-meta {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap: 20px;
+
+    margin-bottom: 35px;
+}
+
+.meta-box {
+
+    padding:
+        16px;
+
+    border:
+        1px solid #e1e5e9;
+
+    border-radius:
+        8px;
+
+    background:
+        #f8fafb;
+}
+
+.meta-box strong {
+
+    display: block;
+
+    color:
+        #64707c;
+
+    font-size:
+        0.7rem;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .05em;
+
+    margin-bottom:
+        6px;
+}
+
+.meta-box span {
+
+    color:
+        #18202a;
+
+    font-weight:
+        700;
+}
+
+
+/* INVOICE ITEMS */
+
+.invoice-items {
+
+    width: 100%;
+
+    border-collapse:
+        collapse;
+
+    margin-bottom:
+        25px;
+}
+
+.invoice-items th {
+
+    background:
+        #111820;
+
+    color:
+        white;
+
+    padding:
+        12px;
+
+    text-align:
+        left;
+}
+
+.invoice-items td {
+
+    border-bottom:
+        1px solid #e5e8eb;
+
+    padding:
+        8px;
+}
+
+.invoice-input {
+
+    background:
+        #f7f9fa;
+
+    border:
+        1px solid #dfe4e8;
+
+    color:
+        #17202a;
+
+    padding:
+        8px;
+
+    border-radius:
+        6px;
+}
+
+.invoice-input:focus {
+
+    border-color:
+        #4d91ff;
+}
+
+.remove-line {
+
+    border: 0;
+
+    background:
+        #ffe7e7;
+
+    color:
+        #c74444;
+
+    border-radius:
+        6px;
+
+    padding:
+        6px 9px;
+
+    cursor:
+        pointer;
+}
+
+
+/* TOTALS */
+
+.invoice-bottom {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 330px;
+
+    gap: 40px;
+
+    margin-top: 30px;
+}
+
+.invoice-notes {
+
+    min-height:
+        100px;
+
+    border:
+        1px solid #e1e5e9;
+
+    border-radius:
+        8px;
+
+    padding:
+        14px;
+
+    color:
+        #596673;
+
+    background:
+        #fafbfc;
+}
+
+.totals {
+
+    width: 100%;
+}
+
+.total-row {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    padding:
+        9px 0;
+
+    color:
+        #5e6974;
+}
+
+.total-row strong {
+
+    color:
+        #18202a;
+}
+
+.grand-total {
+
+    margin-top:
+        8px;
+
+    padding-top:
+        15px;
+
+    border-top:
+        2px solid #18202a;
+
+    font-size:
+        1.3rem;
+
+    font-weight:
+        900;
+
+    color:
+        #111820;
+}
+
+
+/* =========================================================
+   AUTOMATION EXPLANATION
+========================================================= */
+
+.automation-flow {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:
+        15px;
+
+    margin-top:
+        30px;
+}
+
+.flow-card {
+
+    padding:
+        22px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        15px;
+
+    background:
+        var(--surface);
+}
+
+.flow-number {
+
+    width:
+        35px;
+
+    height:
+        35px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(109,168,255,0.1);
+
+    color:
+        var(--blue);
+
+    font-weight:
+        900;
+
+    margin-bottom:
+        15px;
+}
+
+.flow-card h3 {
+
+    margin:
+        0 0 7px;
+}
+
+.flow-card p {
+
+    font-size:
+        0.85rem;
+}
+
+
+/* =========================================================
+   CODE DISPLAY
+========================================================= */
+
+.code-block {
+
+    margin-top:
+        20px;
+
+    background:
+        #06090d;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        12px;
+
+    padding:
+        20px;
+
+    overflow-x:
+        auto;
+}
+
+.code-block code {
+
+    color:
+        #b8c5d4;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size:
+        0.8rem;
+
+    line-height:
+        1.7;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+
+    border-top:
+        1px solid var(--border);
+
+    padding:
+        30px 0;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.8rem;
+}
+
+
+/* =========================================================
+   PRINTING
+========================================================= */
+
+@media print {
+
+    body {
+        background: white;
+    }
+
+    nav,
+    .invoice-controls,
+    .invoice-actions,
+    .section-header,
+    footer {
+        display: none !important;
+    }
+
+    section {
+        padding: 0;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .invoice-layout {
+        display: block;
+    }
+
+    .invoice-paper {
+        box-shadow: none;
+        border-radius: 0;
+        min-height: 0;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:900px) {
+
+    .hero-grid,
+    .comparison,
+    .dashboard-grid,
+    .invoice-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .invoice-controls {
+        position: static;
+    }
+
+    .kpi-grid {
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .automation-flow {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media(max-width:600px) {
+
+    .container {
+        width:
+            min(100% - 25px,1200px);
+    }
+
+    section {
+        padding:
+            65px 0;
+    }
+
+    .nav-links {
+        display:
+            none;
+    }
+
+    .kpi-grid,
+    .mini-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .invoice-paper {
+        padding:
+            22px;
+    }
+
+    .invoice-top,
+    .invoice-bottom {
+        grid-template-columns: 1fr;
+
+        display: block;
+    }
+
+    .invoice-title {
+        text-align: left;
+
+        margin-top: 20px;
+    }
+
+    .invoice-meta {
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+</style>
+</head>
+
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION
+====================================================== -->
+
+<nav>
+
+<div class="nav-inner">
+
+    <div class="logo">
+        We fix <span>Sheets.</span>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="#before-after">
+            Before / After
+        </a>
+
+        <a href="#dashboard">
+            Dashboard
+        </a>
+
+        <a href="#invoice">
+            Invoice Tool
+        </a>
+
+        <a href="#contact">
+            Contact
+        </a>
+
+    </div>
+
+</div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="hero">
+
+<div class="container hero-grid">
+
+<div class="hero-copy">
+
+    <span class="eyebrow">
+        Spreadsheet systems & automation
+    </span>
+
+    <h1>
+
+        Turn spreadsheet
+        <span class="gradient">
+            chaos
+        </span>
+        into a system.
+
+    </h1>
+
+    <p>
+
+        We clean up messy spreadsheets,
+        build automated dashboards,
+        and create custom tools that
+        remove repetitive admin for
+        whatever need you may require.
+
+    </p>
+
+    <div class="buttons">
+
+        <a
+            href="#before-after"
+            class="button button-primary"
+        >
+            See the transformation →
+        </a>
+
+        <a
+            href="#invoice"
+            class="button button-secondary"
+        >
+            Try the invoice tool
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- HERO DASHBOARD -->
+
+<div class="preview">
+
+<div class="preview-top">
+
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+
+</div>
+
+<div class="preview-content">
+
+    <p>
+        Example automated system
+    </p>
+
+    <div class="mini-grid">
+
+        <div class="mini-card">
+
+            <small>
+                Customers
+            </small>
+
+            <strong id="heroCustomers">
+                0
+            </strong>
+
+        </div>
+
+        <div class="mini-card">
+
+            <small>
+                Revenue
+            </small>
+
+            <strong id="heroRevenue">
+                £0
+            </strong>
+
+        </div>
+
+        <div class="mini-card">
+
+            <small>
+                Outstanding
+            </small>
+
+            <strong id="heroOutstanding">
+                £0
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     BEFORE / AFTER
+====================================================== -->
+
+<section id="before-after">
+
+<div class="container">
+
+<div class="section-header">
+
+    <span class="eyebrow">
+        The transformation
+    </span>
+
+    <h2>
+        From messy data to structured information.
+    </h2>
+
+    <p>
+        The point isn't simply to make a spreadsheet
+        look prettier. The information becomes
+        structured enough for other parts of the
+        system to use automatically.
+    </p>
+
+</div>
+
+
+
+<div class="comparison">
+
+
+<!-- BEFORE -->
+
+<div class="panel">
+
+<div class="panel-header">
+
+    <strong>
+        Before
+    </strong>
+
+    <span class="badge badge-red">
+        MANUAL / MESSY
+    </span>
+
+</div>
+
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Customer</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Address</th>
+<th>Job</th>
+<th>Date</th>
+<th>Price</th>
+<th>Paid</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+<td>John Smith</td>
+<td>7123456789</td>
+<td>john@email.com</td>
+<td>London</td>
+<td>Boiler repair</td>
+<td>12/01/24</td>
+<td>£450</td>
+<td>YES</td>
+</tr>
+
+<tr>
+<td>Sarah Jones</td>
+<td>7123456790</td>
+<td></td>
+<td>Croydon</td>
+<td>Leak fix</td>
+<td>January</td>
+<td>£250</td>
+<td>NO</td>
+</tr>
+
+<tr>
+<td>David Smith</td>
+<td>7123456791</td>
+<td>mike@gmail</td>
+<td></td>
+<td>Bathroom</td>
+<td>15/2</td>
+<td>£3,000</td>
+<td>YES</td>
+</tr>
+
+<tr>
+<td>Case Torres</td>
+<td>7123456792</td>
+<td>fapubo@mail.com</td>
+<td>London</td>
+<td>Boiler repair</td>
+<td>January</td>
+<td>£250</td>
+<td>YES</td>
+</tr>
+
+<tr>
+<td>Violet Short</td>
+<td>7123456793</td>
+<td>nuxe@hotmail.com</td>
+<td>Basingstoke</td>
+<td>Leak fix</td>
+<td>January</td>
+<td>£450</td>
+<td>YES</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+
+<!-- AFTER -->
+
+<div class="panel">
+
+<div class="panel-header">
+
+    <strong>
+        After
+    </strong>
+
+    <span class="badge badge-green">
+        STRUCTURED / AUTOMATED
+    </span>
+
+</div>
+
+
+<div class="table-wrapper">
+
+<table class="after-table">
+
+<thead>
+
+<tr>
+
+<th>Customer</th>
+<th>Customer ID</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Contact</th>
+<th>City</th>
+<th>Postcode</th>
+<th>Type</th>
+
+</tr>
+
+</thead>
+
+<tbody id="afterTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DASHBOARD
+====================================================== -->
+
+<section id="dashboard">
+
+<div class="container">
+
+<div class="section-header">
+
+<span class="eyebrow">
+    Automated dashboard
+</span>
+
+<h2>
+    The data starts working for you.
+</h2>
+
+<p>
+    Once the raw information is structured,
+    calculations and reporting can happen
+    automatically.
+</p>
+
+</div>
+
+
+<!-- KPI -->
+
+<div class="kpi-grid">
+
+<div class="kpi">
+
+<span class="kpi-label">
+Customers
+</span>
+
+<strong
+    class="kpi-value"
+    id="totalCustomers"
+>
+0
+</strong>
+
+</div>
+
+
+<div class="kpi">
+
+<span class="kpi-label">
+Total revenue
+</span>
+
+<strong
+    class="kpi-value"
+    id="totalRevenue"
+>
+£0
+</strong>
+
+</div>
+
+
+<div class="kpi">
+
+<span class="kpi-label">
+Paid
+</span>
+
+<strong
+    class="kpi-value"
+    id="paidRevenue"
+>
+£0
+</strong>
+
+</div>
+
+
+<div class="kpi">
+
+<span class="kpi-label">
+Outstanding
+</span>
+
+<strong
+    class="kpi-value"
+    id="outstandingRevenue"
+>
+£0
+</strong>
+
+</div>
+
+</div>
+
+
+
+<div class="dashboard-grid">
+
+
+<!-- CHART -->
+
+<div class="dashboard-card">
+
+<h3>
+Revenue by month
+</h3>
+
+<div
+    class="chart"
+    id="revenueChart"
+></div>
+
+</div>
+
+
+
+<!-- BREAKDOWN -->
+
+<div class="dashboard-card">
+
+<h3>
+Customer breakdown
+</h3>
+
+<p>
+Residential:
+<strong id="residentialCount">
+0
+</strong>
+</p>
+
+<p>
+Commercial:
+<strong id="commercialCount">
+0
+</strong>
+</p>
+
+<p>
+Paid:
+<strong id="paidCount">
+0
+</strong>
+</p>
+
+<p>
+Outstanding:
+<strong id="unpaidCount">
+0
+</strong>
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- CUSTOMER DATABASE -->
+
+<div class="dashboard-card">
+
+<h3>
+Customer database
+</h3>
+
+
+<div class="controls">
+
+<div class="search-box">
+
+<input
+    id="search"
+    type="text"
+    placeholder="Search customer, city, postcode..."
+>
+
+</div>
+
+
+<div style="min-width:180px">
+
+<select id="customerType">
+
+<option value="all">
+All customers
+</option>
+
+<option value="Residential">
+Residential
+</option>
+
+<option value="Commercial">
+Commercial
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Customer</th>
+<th>ID</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Contact</th>
+<th>Address</th>
+<th>City</th>
+<th>Postcode</th>
+<th>Type</th>
+
+</tr>
+
+</thead>
+
+<tbody id="customerTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     INVOICE BUILDER
+====================================================== -->
+
+<section id="invoice">
+
+<div class="container">
+
+<div class="section-header">
+
+<span class="eyebrow">
+    Live demo
+</span>
+
+<h2>
+    Automated invoice maker.
+</h2>
+
+<p>
+
+    Select a Customer ID and the invoice
+    automatically pulls the customer's
+    information from the customer database.
+
+    Change quantities or prices and the
+    totals update automatically.
+
+</p>
+
+</div>
+
+
+
+<div class="invoice-layout">
+
+
+<!-- =================================================
+     CONTROLS
+================================================== -->
+
+<div class="invoice-controls">
+
+<h3>
+    Invoice controls
+</h3>
+
+
+<div class="control-group">
+
+<label>
+    Customer ID
+</label>
+
+<select id="invoiceCustomer">
+
+</select>
+
+<div class="control-description">
+
+    Try changing the Customer ID.
+    The customer information on the
+    invoice will update automatically.
+
+</div>
+
+</div>
+
+
+
+<div class="control-group">
+
+<label>
+    Invoice number
+</label>
+
+<input
+    id="invoiceNumber"
+    value="INV-0002"
+>
+
+</div>
+
+
+
+<div class="control-group">
+
+<label>
+    Job number
+</label>
+
+<input
+    id="jobNumber"
+    value="JOB-0002"
+>
+
+</div>
+
+
+
+<div class="control-group">
+
+<label>
+    Invoice date
+</label>
+
+<input
+    id="invoiceDate"
+    type="date"
+>
+
+</div>
+
+
+
+<div class="control-group">
+
+<label>
+    Due date
+</label>
+
+<input
+    id="dueDate"
+    type="date"
+>
+
+</div>
+
+
+
+<div class="control-group">
+
+<label>
+    VAT rate (%)
+</label>
+
+<input
+    id="vatRate"
+    type="number"
+    value="20"
+    min="0"
+    step="1"
+>
+
+</div>
+
+
+
+<button
+    class="button button-primary"
+    style="width:100%"
+    onclick="window.print()"
+>
+
+    Print / Save PDF
+
+</button>
+
+</div>
+
+
+
+<!-- =================================================
+     INVOICE PAPER
+================================================== -->
+
+<div class="invoice-paper" id="invoicePaper">
+
+
+<!-- INVOICE HEADER -->
+
+<div class="invoice-top">
+
+<div>
+
+<div class="business-name">
+    PlumbingLTD
+</div>
+
+<div class="business-details">
+
+    123 Sesame Street<br>
+
+    London, SW3<br>
+
+    (123) 456-7890
+
+</div>
+
+</div>
+
+
+<div class="invoice-title">
+
+<h2>
+    INVOICE
+</h2>
+
+<p>
+    Submitted on
+    <strong id="displayInvoiceDate">
+        17/07/2026
+    </strong>
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- INVOICE META -->
+
+<div class="invoice-meta">
+
+
+<div class="meta-box">
+
+<strong>
+    Invoice for
+</strong>
+
+<span id="invoiceCustomerName">
+    Sarah Jones
+</span>
+
+<br>
+
+<span id="invoiceCompany">
+    BuildingLTD
+</span>
+
+<br>
+
+<span id="invoiceAddress">
+    6 Chamberlayne Court
+</span>
+
+<br>
+
+<span id="invoiceCityPostcode">
+    Hoddesdon, DG9 0BB
+</span>
+
+</div>
+
+
+
+<div class="meta-box">
+
+<strong>
+    Payable to
+</strong>
+
+<span>
+    PlumbingLTD
+</span>
+
+<br>
+
+<span>
+    123 Sesame Street
+</span>
+
+<br>
+
+<span>
+    London, SW3
+</span>
+
+</div>
+
+
+
+<div class="meta-box">
+
+<strong>
+    Invoice #
+</strong>
+
+<span id="displayInvoiceNumber">
+    INV-0002
+</span>
+
+<br><br>
+
+<strong>
+    Job #
+</strong>
+
+<span id="displayJobNumber">
+    JOB-0002
+</span>
+
+<br><br>
+
+<strong>
+    Due Date
+</strong>
+
+<span id="displayDueDate">
+    31/07/2026
+</span>
+
+</div>
+
+</div>
+
+
+
+<!-- CUSTOMER CONTACT -->
+
+<div
+    style="
+        margin-bottom:25px;
+        padding:14px;
+        border:1px solid #e3e7eb;
+        border-radius:8px;
+        background:#f8fafb;
+    "
+>
+
+<strong>
+    Customer contact:
+</strong>
+
+<span id="invoicePhone">
+    07123456790
+</span>
+
+&nbsp; · &nbsp;
+
+<span id="invoiceEmail">
+    sarah@example.com
+</span>
+
+</div>
+
+
+
+<!-- LINE ITEMS -->
+
+<table class="invoice-items">
+
+<thead>
+
+<tr>
+
+<th style="width:40%">
+    Description
+</th>
+
+<th style="width:12%">
+    Qty
+</th>
+
+<th style="width:18%">
+    Unit price
+</th>
+
+<th style="width:18%">
+    Total
+</th>
+
+<th style="width:12%">
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="invoiceLines">
+
+</tbody>
+
+</table>
+
+
+
+<button
+    class="button button-secondary invoice-actions"
+    onclick="addInvoiceLine()"
+    style="
+        color:#17202a;
+        background:#f0f3f5;
+        border:1px solid #dfe4e8;
+    "
+>
+
+    + Add line
+
+</button>
+
+
+
+<!-- BOTTOM -->
+
+<div class="invoice-bottom">
+
+
+<div>
+
+<strong>
+    Notes
+</strong>
+
+<div
+    class="invoice-notes"
+    contenteditable="true"
+>
+
+    Thank you for your business.
+
+</div>
+
+</div>
+
+
+
+<div class="totals">
+
+<div class="total-row">
+
+<span>
+    Subtotal
+</span>
+
+<strong id="subtotal">
+    £0.00
+</strong>
+
+</div>
+
+
+<div class="total-row">
+
+<span>
+    VAT
+    (<span id="vatLabel">20</span>%)
+</span>
+
+<strong id="vat">
+    £0.00
+</strong>
+
+</div>
+
+
+<div class="total-row grand-total">
+
+<span>
+    TOTAL
+</span>
+
+<strong id="grandTotal">
+    £0.00
+</strong>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- FOOTER -->
+
+<div
+    style="
+        margin-top:50px;
+        padding-top:15px;
+        border-top:1px solid #e3e7eb;
+        font-size:.75rem;
+        color:#75808b;
+    "
+>
+
+Payment terms: Please pay by the due date shown above.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     HOW THE AUTOMATION WORKS
+====================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="section-header">
+
+<span class="eyebrow">
+    Behind the demo
+</span>
+
+<h2>
+    One ID connects the system.
+</h2>
+
+<p>
+
+    This is the important part to demonstrate
+    to a potential customer. The invoice isn't
+    manually re-entering information.
+
+</p>
+
+</div>
+
+
+
+<div class="automation-flow">
+
+
+<div class="flow-card">
+
+<div class="flow-number">
+    01
+</div>
+
+<h3>
+    Customer database
+</h3>
+
+<p>
+
+    Each customer receives a unique
+    Customer ID such as
+    <strong>CID-0002</strong>.
+
+</p>
+
+</div>
+
+
+
+<div class="flow-card">
+
+<div class="flow-number">
+    02
+</div>
+
+<h3>
+    Select the customer
+</h3>
+
+<p>
+
+    The user selects the Customer ID
+    from the invoice tool.
+
+</p>
+
+</div>
+
+
+
+<div class="flow-card">
+
+<div class="flow-number">
+    03
+</div>
+
+<h3>
+    Invoice populates
+</h3>
+
+<p>
+
+    Name, address, contact details
+    and other information are pulled
+    into the invoice automatically.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- FORMULA EXAMPLE -->
+
+<div class="code-block">
+
+<code>
+
+=IFNA(VLOOKUP(F12,Invoices!A:B,2,FALSE),"")<br><br>
+
+Customer ID → lookup → customer information<br><br>
+
+Quantity × Unit Price → Line Total<br><br>
+
+SUM(Line Totals) → Subtotal<br><br>
+
+Subtotal × VAT Rate → VAT<br><br>
+
+Subtotal + VAT → Grand Total
+
+</code>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CTA
+====================================================== -->
+
+<section id="contact">
+
+<div class="container">
+
+<div
+    class="panel"
+    style="
+        text-align:center;
+        padding:70px 25px;
+    "
+>
+
+<span class="eyebrow">
+    Spreadsheet headache?
+</span>
+
+<h2>
+    We can turn it into a system.
+</h2>
+
+<p style="max-width:650px;margin:auto">
+
+    The example above shows the type of
+    workflow that can be built around the
+    data a business already has.
+
+</p>
+
+<div
+    class="buttons"
+    style="justify-content:center"
+>
+
+<a
+    href="mailto:michaelidesa8@gmail.com"
+    class="button button-primary"
+>
+
+    Start a conversation
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<footer>
+
+<div class="container">
+
+    Spreadsheet systems & automation
+
+</div>
+
+</footer>
+
+
+
+<script>
+
+
+/* =========================================================
+   CUSTOMER DATABASE
+
+   EDIT THIS SECTION.
+
+   The Customer ID is the key used by the invoice.
+
+   Add more customers by copying one object and
+   changing the values.
+========================================================= */
+
+const customers = [
+
+    {
+
+        id: "CID-0001",
+
+        name: "John Smith",
+
+        company: "",
+
+        phone: "07123456789",
+
+        email: "john@example.com",
+
+        contact: "WhatsApp",
+
+        address: "4 Trewans Terrace",
+
+        city: "Redruth",
+
+        postcode: "ST14 8DB",
+
+        type: "Residential",
+
+        firstJob: "10 Jan 2023",
+
+        lastContact: "10 Jan 2023",
+
+        revenue: 450,
+
+        paid: true,
+
+        month: "January"
+
+    },
+
+
+    {
+
+        id: "CID-0002",
+
+        name: "Sarah Jones",
+
+        company: "BuildingLTD",
+
+        phone: "07123456790",
+
+        email: "sarah@example.com",
+
+        contact: "WhatsApp",
+
+        address: "6 Chamberlayne Court, Fawkon Walk",
+
+        city: "Hoddesdon",
+
+        postcode: "DG9 0BB",
+
+        type: "Residential",
+
+        firstJob: "4 Oct 2023",
+
+        lastContact: "27 Jan 2023",
+
+        revenue: 650,
+
+        paid: false,
+
+        month: "January"
+
+    },
+
+
+    {
+
+        id: "CID-0003",
+
+        name: "David Smith",
+
+        company: "",
+
+        phone: "07123456791",
+
+        email: "david@example.com",
+
+        contact: "WhatsApp",
+
+        address: "541 Barandon Walk",
+
+        city: "London",
+
+        postcode: "BB7 2QU",
+
+        type: "Residential",
+
+        firstJob: "5 Oct 2023",
+
+        lastContact: "22 Feb 2024",
+
+        revenue: 3000,
+
+        paid: true,
+
+        month: "February"
+
+    },
+
+
+    {
+
+        id: "CID-0004",
+
+        name: "Case Torres",
+
+        company: "",
+
+        phone: "07123456792",
+
+        email: "case@example.com",
+
+        contact: "WhatsApp",
+
+        address: "21 Starling Close",
+
+        city: "Buckhurst Hill",
+
+        postcode: "IG9 5TN",
+
+        type: "Residential",
+
+        firstJob: "5 Oct 2023",
+
+        lastContact: "28 Jan 2023",
+
+        revenue: 250,
+
+        paid: true,
+
+        month: "January"
+
+    },
+
+
+    {
+
+        id: "CID-0005",
+
+        name: "Violet Short",
+
+        company: "",
+
+        phone: "07123456793",
+
+        email: "violet@example.com",
+
+        contact: "WhatsApp",
+
+        address: "9 Mere Road",
+
+        city: "Basingstoke",
+
+        postcode: "RG21 6BG",
+
+        type: "Commercial",
+
+        firstJob: "6 Oct 2023",
+
+        lastContact: "29 Jan 2023",
+
+        revenue: 450,
+
+        paid: true,
+
+        month: "January"
+
+    },
+
+
+    {
+
+        id: "CID-0006",
+
+        name: "Hezekiah Snow",
+
+        company: "",
+
+        phone: "07123456794",
+
+        email: "hezekiah@example.com",
+
+        contact: "WhatsApp",
+
+        address: "8 Chimney Mills",
+
+        city: "Newcastle",
+
+        postcode: "NE2 4AL",
+
+        type: "Residential",
+
+        firstJob: "6 Oct 2023",
+
+        lastContact: "26 Feb 2024",
+
+        revenue: 560,
+
+        paid: false,
+
+        month: "February"
+
+    },
+
+
+    {
+
+        id: "CID-0007",
+
+        name: "Alexia Sims",
+
+        company: "",
+
+        phone: "07123456795",
+
+        email: "alexia@example.com",
+
+        contact: "WhatsApp",
+
+        address: "103 Victoria Road",
+
+        city: "Middlesbrough",
+
+        postcode: "TS1 3HY",
+
+        type: "Residential",
+
+        firstJob: "10 Oct 2023",
+
+        lastContact: "10 Sep 2024",
+
+        revenue: 460,
+
+        paid: true,
+
+        month: "September"
+
+    },
+
+
+    {
+
+        id: "CID-0008",
+
+        name: "Brian Rodgers",
+
+        company: "",
+
+        phone: "07123456796",
+
+        email: "brian@example.com",
+
+        contact: "WhatsApp",
+
+        address: "5 Pond View Terrace",
+
+        city: "Wirral",
+
+        postcode: "CH46 0SE",
+
+        type: "Residential",
+
+        firstJob: "10 Oct 2023",
+
+        lastContact: "2 Feb 2023",
+
+        revenue: 450,
+
+        paid: false,
+
+        month: "February"
+
+    },
+
+
+    {
+
+        id: "CID-0009",
+
+        name: "Selah Durham",
+
+        company: "",
+
+        phone: "07123456797",
+
+        email: "selah@example.com",
+
+        contact: "WhatsApp",
+
+        address: "42 Loch Street",
+
+        city: "Orrell",
+
+        postcode: "WN5 0AF",
+
+        type: "Commercial",
+
+        firstJob: "11 Oct 2023",
+
+        lastContact: "3 Feb 2023",
+
+        revenue: 450,
+
+        paid: false,
+
+        month: "February"
+
+    },
+
+
+    {
+
+        id: "CID-0010",
+
+        name: "Kellen Ochoa",
+
+        company: "",
+
+        phone: "07123456798",
+
+        email: "kellen@example.com",
+
+        contact: "WhatsApp",
+
+        address: "3 Rutland Court",
+
+        city: "Leeds",
+
+        postcode: "LS12 6BU",
+
+        type: "Residential",
+
+        firstJob: "11 Oct 2023",
+
+        lastContact: "3 Feb 2023",
+
+        revenue: 450,
+
+        paid: false,
+
+        month: "February"
+
+    },
+
+
+    {
+
+        id: "CID-0011",
+
+        name: "Luciana Vega",
+
+        company: "",
+
+        phone: "07123456799",
+
+        email: "luciana@example.com",
+
+        contact: "WhatsApp",
+
+        address: "20 Danford Close",
+
+        city: "Stourbridge",
+
+        postcode: "DY8 1QS",
+
+        type: "Residential",
+
+        firstJob: "14 Oct 2023",
+
+        lastContact: "5 Mar 2024",
+
+        revenue: 1200,
+
+        paid: false,
+
+        month: "March"
+
+    },
+
+
+    {
+
+        id: "CID-0012",
+
+        name: "Aidan Conway",
+
+        company: "",
+
+        phone: "07123456800",
+
+        email: "aidan@example.com",
+
+        contact: "WhatsApp",
+
+        address: "29 Walkmills",
+
+        city: "Shrewsbury",
+
+        postcode: "SY6 6NJ",
+
+        type: "Residential",
+
+        firstJob: "14 Oct 2023",
+
+        lastContact: "24 Nov 2024",
+
+        revenue: 2000,
+
+        paid: false,
+
+        month: "November"
+
+    },
+
+
+    {
+
+        id: "CID-0013",
+
+        name: "Ryann Galvan",
+
+        company: "",
+
+        phone: "07123456801",
+
+        email: "ryann@example.com",
+
+        contact: "WhatsApp",
+
+        address: "67 Brook Avenue",
+
+        city: "Edgware",
+
+        postcode: "HA8 9UZ",
+
+        type: "Residential",
+
+        firstJob: "19 Oct 2023",
+
+        lastContact: "11 Feb 2023",
+
+        revenue: 3200,
+
+        paid: true,
+
+        month: "February"
+
+    },
+
+
+    {
+
+        id: "CID-0014",
+
+        name: "Kingsley Barry",
+
+        company: "",
+
+        phone: "07123456802",
+
+        email: "kingsley@example.com",
+
+        contact: "WhatsApp",
+
+        address: "Flat 1, Waterloo Road",
+
+        city: "Wellington",
+
+        postcode: "TA21 8HY",
+
+        type: "Residential",
+
+        firstJob: "23 Oct 2023",
+
+        lastContact: "15 Feb 2023",
+
+        revenue: 450,
+
+        paid: false,
+
+        month: "February"
+
+    },
+
+
+    {
+
+        id: "CID-0015",
+
+        name: "Waverly Bryant",
+
+        company: "",
+
+        phone: "07123456803",
+
+        email: "waverly@example.com",
+
+        contact: "WhatsApp",
+
+        address: "8 Stonedene Park",
+
+        city: "Wetherby",
+
+        postcode: "LS22 7FZ",
+
+        type: "Residential",
+
+        firstJob: "29 Oct 2023",
+
+        lastContact: "31 Aug 2024",
+
+        revenue: 350,
+
+        paid: true,
+
+        month: "August"
+
+    },
+
+
+    {
+
+        id: "CID-0016",
+
+        name: "Jonah Castillo",
+
+        company: "",
+
+        phone: "07123456804",
+
+        email: "jonah@example.com",
+
+        contact: "WhatsApp",
+
+        address: "Flat 67, Hampton Tower",
+
+        city: "Southampton",
+
+        postcode: "SO19 9PD",
+
+        type: "Residential",
+
+        firstJob: "31 Oct 2023",
+
+        lastContact: "23 Feb 2023",
+
+        revenue: 1050,
+
+        paid: false,
+
+        month: "February"
+
+    }
+
+];
+
+
+
+/* =========================================================
+   MONEY FORMAT
+========================================================= */
+
+function money(value) {
+
+    return new Intl.NumberFormat(
+        "en-GB",
+        {
+            style: "currency",
+            currency: "GBP",
+            minimumFractionDigits: 2
+        }
+    ).format(value);
+
+}
+
+
+
+/* =========================================================
+   AFTER TABLE
+========================================================= */
+
+function renderAfterTable() {
+
+    const table =
+        document.getElementById(
+            "afterTable"
+        );
+
+    table.innerHTML = "";
+
+    customers.forEach(customer => {
+
+        const row =
+            document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td class="auto-field">
+                ${customer.name}
+            </td>
+
+            <td class="id-field">
+                ${customer.id}
+            </td>
+
+            <td class="auto-field">
+                ${customer.phone}
+            </td>
+
+            <td class="auto-field">
+                ${customer.email}
+            </td>
+
+            <td class="auto-field">
+                ${customer.contact}
+            </td>
+
+            <td class="auto-field">
+                ${customer.address}
+            </td>
+
+            <td class="auto-field">
+                ${customer.city}
+            </td>
+
+            <td class="auto-field">
+                ${customer.postcode}
+            </td>
+
+            <td class="${
+                customer.type === "Commercial"
+                    ? "warning-field"
+                    : "auto-field"
+            }">
+
+                ${customer.type}
+
+            </td>
+
+        `;
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function updateDashboard() {
+
+    const totalCustomers =
+        customers.length;
+
+
+    const totalRevenue =
+        customers.reduce(
+            (sum, customer) =>
+                sum + customer.revenue,
+            0
+        );
+
+
+    const paidRevenue =
+        customers
+            .filter(customer => customer.paid)
+            .reduce(
+                (sum, customer) =>
+                    sum + customer.revenue,
+                0
+            );
+
+
+    const outstanding =
+        totalRevenue -
+        paidRevenue;
+
+
+    document.getElementById(
+        "totalCustomers"
+    ).textContent =
+        totalCustomers;
+
+
+    document.getElementById(
+        "totalRevenue"
+    ).textContent =
+        money(totalRevenue);
+
+
+    document.getElementById(
+        "paidRevenue"
+    ).textContent =
+        money(paidRevenue);
+
+
+    document.getElementById(
+        "outstandingRevenue"
+    ).textContent =
+        money(outstanding);
+
+
+    document.getElementById(
+        "heroCustomers"
+    ).textContent =
+        totalCustomers;
+
+
+    document.getElementById(
+        "heroRevenue"
+    ).textContent =
+        money(totalRevenue);
+
+
+    document.getElementById(
+        "heroOutstanding"
+    ).textContent =
+        money(outstanding);
+
+
+    document.getElementById(
+        "residentialCount"
+    ).textContent =
+        customers.filter(
+            c => c.type === "Residential"
+        ).length;
+
+
+    document.getElementById(
+        "commercialCount"
+    ).textContent =
+        customers.filter(
+            c => c.type === "Commercial"
+        ).length;
+
+
+    document.getElementById(
+        "paidCount"
+    ).textContent =
+        customers.filter(
+            c => c.paid
+        ).length;
+
+
+    document.getElementById(
+        "unpaidCount"
+    ).textContent =
+        customers.filter(
+            c => !c.paid
+        ).length;
+
+
+    renderChart();
+
+}
+
+
+
+/* =========================================================
+   REVENUE CHART
+========================================================= */
+
+function renderChart() {
+
+    const totals = {};
+
+
+    customers.forEach(customer => {
+
+        totals[customer.month] =
+            (totals[customer.month] || 0)
+            + customer.revenue;
+
+    });
+
+
+    const months =
+        Object.keys(totals);
+
+
+    const values =
+        Object.values(totals);
+
+
+    const highest =
+        Math.max(...values, 1);
+
+
+    const chart =
+        document.getElementById(
+            "revenueChart"
+        );
+
+
+    chart.innerHTML = "";
+
+
+    months.forEach(month => {
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "bar-wrap";
+
+
+        const bar =
+            document.createElement("div");
+
+        bar.className =
+            "bar";
+
+
+        bar.style.height =
+            `${(totals[month] / highest) * 100}%`;
+
+
+        const label =
+            document.createElement("div");
+
+        label.className =
+            "bar-label";
+
+        label.textContent =
+            month.substring(0,3);
+
+
+        wrapper.appendChild(bar);
+
+        wrapper.appendChild(label);
+
+        chart.appendChild(wrapper);
+
+    });
+
+}
+
+
+
+/* =========================================================
+   CUSTOMER SEARCH
+========================================================= */
+
+function renderCustomerTable() {
+
+    const search =
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase();
+
+
+    const type =
+        document
+            .getElementById("customerType")
+            .value;
+
+
+    const filtered =
+        customers.filter(customer => {
+
+            const combined = `
+
+                ${customer.name}
+                ${customer.id}
+                ${customer.email}
+                ${customer.city}
+                ${customer.postcode}
+
+            `.toLowerCase();
+
+
+            const matchesSearch =
+                combined.includes(search);
+
+
+            const matchesType =
+                type === "all" ||
+                customer.type === type;
+
+
+            return (
+                matchesSearch &&
+                matchesType
+            );
+
+        });
+
+
+    const tbody =
+        document.getElementById(
+            "customerTable"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    filtered.forEach(customer => {
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>
+                <strong>
+                    ${customer.name}
+                </strong>
+            </td>
+
+            <td>
+                ${customer.id}
+            </td>
+
+            <td>
+                ${customer.phone}
+            </td>
+
+            <td>
+                ${customer.email}
+            </td>
+
+            <td>
+                ${customer.contact}
+            </td>
+
+            <td>
+                ${customer.address}
+            </td>
+
+            <td>
+                ${customer.city}
+            </td>
+
+            <td>
+                ${customer.postcode}
+            </td>
+
+            <td>
+                ${customer.type}
+            </td>
+
+        `;
+
+
+        tbody.appendChild(row);
+
+    });
+
+}
+
+
+
+/* =========================================================
+   INVOICE CUSTOMER DROPDOWN
+========================================================= */
+
+function populateCustomerDropdown() {
+
+    const select =
+        document.getElementById(
+            "invoiceCustomer"
+        );
+
+
+    select.innerHTML = "";
+
+
+    customers.forEach(customer => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value =
+            customer.id;
+
+
+        option.textContent =
+            `${customer.id} — ${customer.name}`;
+
+
+        select.appendChild(option);
+
+    });
+
+
+    /*
+       Start the demo on Sarah Jones,
+       matching your example.
+    */
+
+    select.value =
+        "CID-0002";
+
+
+    updateInvoiceCustomer();
+
+}
+
+
+
+/* =========================================================
+   CUSTOMER ID → INVOICE
+========================================================= */
+
+function updateInvoiceCustomer() {
+
+    const id =
+        document.getElementById(
+            "invoiceCustomer"
+        ).value;
+
+
+    const customer =
+        customers.find(
+            c => c.id === id
+        );
+
+
+    if (!customer) {
+        return;
+    }
+
+
+    document.getElementById(
+        "invoiceCustomerName"
+    ).textContent =
+        customer.name;
+
+
+    document.getElementById(
+        "invoiceCompany"
+    ).textContent =
+        customer.company || "—";
+
+
+    document.getElementById(
+        "invoiceAddress"
+    ).textContent =
+        customer.address;
+
+
+    document.getElementById(
+        "invoiceCityPostcode"
+    ).textContent =
+        `${customer.city}, ${customer.postcode}`;
+
+
+    document.getElementById(
+        "invoicePhone"
+    ).textContent =
+        customer.phone;
+
+
+    document.getElementById(
+        "invoiceEmail"
+    ).textContent =
+        customer.email;
+
+}
+
+
+
+/* =========================================================
+   INVOICE LINE ITEMS
+========================================================= */
+
+let invoiceLines = [
+
+    {
+        description: "Boiler repair",
+        quantity: 1,
+        price: 200
+    },
+
+    {
+        description: "Labour / installation",
+        quantity: 2,
+        price: 200
+    }
+
+];
+
+
+
+function renderInvoiceLines() {
+
+    const tbody =
+        document.getElementById(
+            "invoiceLines"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    invoiceLines.forEach(
+        (line, index) => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const total =
+                Number(line.quantity)
+                *
+                Number(line.price);
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    <input
+                        class="invoice-input"
+                        value="${line.description}"
+                        oninput="
+                            updateLine(
+                                ${index},
+                                'description',
+                                this.value
+                            )
+                        "
+                    >
+
+                </td>
+
+
+                <td>
+
+                    <input
+                        class="invoice-input"
+                        type="number"
+                        min="0"
+                        step="1"
+                        value="${line.quantity}"
+                        oninput="
+                            updateLine(
+                                ${index},
+                                'quantity',
+                                this.value
+                            )
+                        "
+                    >
+
+                </td>
+
+
+                <td>
+
+                    <input
+                        class="invoice-input"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value="${line.price}"
+                        oninput="
+                            updateLine(
+                                ${index},
+                                'price',
+                                this.value
+                            )
+                        "
+                    >
+
+                </td>
+
+
+                <td>
+
+                    <strong>
+                        ${money(total)}
+                    </strong>
+
+                </td>
+
+
+                <td>
+
+                    <button
+                        class="remove-line"
+                        onclick="
+                            removeInvoiceLine(${index})
+                        "
+                    >
+                        ×
+                    </button>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(row);
+
+        }
+    );
+
+
+    calculateInvoice();
+
+}
+
+
+
+/* =========================================================
+   UPDATE LINE
+========================================================= */
+
+function updateLine(
+    index,
+    property,
+    value
+) {
+
+    if (
+        property === "quantity" ||
+        property === "price"
+    ) {
+
+        value =
+            Number(value) || 0;
+
+    }
+
+
+    invoiceLines[index][property] =
+        value;
+
+
+    renderInvoiceLines();
+
+}
+
+
+
+/* =========================================================
+   ADD LINE
+========================================================= */
+
+function addInvoiceLine() {
+
+    invoiceLines.push({
+
+        description:
+            "New item",
+
+        quantity:
+            1,
+
+        price:
+            0
+
+    });
+
+
+    renderInvoiceLines();
+
+}
+
+
+
+/* =========================================================
+   REMOVE LINE
+========================================================= */
+
+function removeInvoiceLine(index) {
+
+    invoiceLines.splice(
+        index,
+        1
+    );
+
+
+    renderInvoiceLines();
+
+}
+
+
+
+/* =========================================================
+   CALCULATE INVOICE
+========================================================= */
+
+function calculateInvoice() {
+
+    const subtotal =
+        invoiceLines.reduce(
+            (sum, line) =>
+                sum +
+                (
+                    Number(line.quantity)
+                    *
+                    Number(line.price)
+                ),
+            0
+        );
+
+
+    const vatRate =
+        Number(
+            document.getElementById(
+                "vatRate"
+            ).value
+        ) || 0;
+
+
+    const vat =
+        subtotal *
+        (vatRate / 100);
+
+
+    const grandTotal =
+        subtotal +
+        vat;
+
+
+    document.getElementById(
+        "subtotal"
+    ).textContent =
+        money(subtotal);
+
+
+    document.getElementById(
+        "vat"
+    ).textContent =
+        money(vat);
+
+
+    document.getElementById(
+        "grandTotal"
+    ).textContent =
+        money(grandTotal);
+
+
+    document.getElementById(
+        "vatLabel"
+    ).textContent =
+        vatRate;
+
+}
+
+
+
+/* =========================================================
+   INVOICE DATE
+========================================================= */
+
+function formatDate(
+    date
+) {
+
+    if (!date) {
+        return "";
+    }
+
+
+    const parts =
+        date.split("-");
+
+
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+}
+
+
+
+/* =========================================================
+   INVOICE META UPDATES
+========================================================= */
+
+function updateInvoiceMeta() {
+
+    document.getElementById(
+        "displayInvoiceNumber"
+    ).textContent =
+        document.getElementById(
+            "invoiceNumber"
+        ).value;
+
+
+    document.getElementById(
+        "displayJobNumber"
+    ).textContent =
+        document.getElementById(
+            "jobNumber"
+        ).value;
+
+
+    document.getElementById(
+        "displayInvoiceDate"
+    ).textContent =
+        formatDate(
+            document.getElementById(
+                "invoiceDate"
+            ).value
+        );
+
+
+    document.getElementById(
+        "displayDueDate"
+    ).textContent =
+        formatDate(
+            document.getElementById(
+                "dueDate"
+            ).value
+        );
+
+}
+
+
+
+/* =========================================================
+   EVENT LISTENERS
+========================================================= */
+
+document
+    .getElementById("invoiceCustomer")
+    .addEventListener(
+        "change",
+        updateInvoiceCustomer
+    );
+
+
+document
+    .getElementById("vatRate")
+    .addEventListener(
+        "input",
+        calculateInvoice
+    );
+
+
+document
+    .getElementById("invoiceNumber")
+    .addEventListener(
+        "input",
+        updateInvoiceMeta
+    );
+
+
+document
+    .getElementById("jobNumber")
+    .addEventListener(
+        "input",
+        updateInvoiceMeta
+    );
+
+
+document
+    .getElementById("invoiceDate")
+    .addEventListener(
+        "change",
+        updateInvoiceMeta
+    );
+
+
+document
+    .getElementById("dueDate")
+    .addEventListener(
+        "change",
+        updateInvoiceMeta
+    );
+
+
+document
+    .getElementById("search")
+    .addEventListener(
+        "input",
+        renderCustomerTable
+    );
+
+
+document
+    .getElementById("customerType")
+    .addEventListener(
+        "change",
+        renderCustomerTable
+    );
+
+
+
+/* =========================================================
+   DEFAULT DATES
+========================================================= */
+
+document
+    .getElementById("invoiceDate")
+    .value =
+        "2026-07-17";
+
+
+document
+    .getElementById("dueDate")
+    .value =
+        "2026-07-31";
+
+
+
+/* =========================================================
+   START EVERYTHING
+========================================================= */
+
+renderAfterTable();
+
+updateDashboard();
+
+renderCustomerTable();
+
+populateCustomerDropdown();
+
+renderInvoiceLines();
+
+updateInvoiceMeta();
+
+calculateInvoice();
+
+
+</script>
+
+</body>
+</html>
